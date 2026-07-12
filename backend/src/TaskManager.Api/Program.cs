@@ -8,6 +8,7 @@ using TaskManager.Api.Middleware;
 using TaskManager.Api.Models;
 using TaskManager.Application;
 using TaskManager.Infrastructure;
+using TaskManager.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -83,6 +94,12 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TaskManagerDbContext>();
+    dbContext.Database.EnsureCreated();
+}
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -92,6 +109,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 

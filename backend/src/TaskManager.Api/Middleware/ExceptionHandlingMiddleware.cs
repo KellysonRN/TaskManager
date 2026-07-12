@@ -37,10 +37,18 @@ public sealed class ExceptionHandlingMiddleware
             _logger.LogError(ex, "Unhandled exception occurred while processing request.");
             context.Response.Clear();
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            var payload = JsonSerializer.Serialize(new { error = "An unexpected error occurred." });
-            await context.Response.WriteAsync(payload);
+            if (ex is TaskManager.Application.Common.Cqrs.ValidationException)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var payload = JsonSerializer.Serialize(new { error = ex.Message });
+                await context.Response.WriteAsync(payload);
+                return;
+            }
+
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            var fallbackPayload = JsonSerializer.Serialize(new { error = "An unexpected error occurred." });
+            await context.Response.WriteAsync(fallbackPayload);
         }
     }
 }
