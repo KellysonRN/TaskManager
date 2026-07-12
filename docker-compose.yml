@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: docker/Dockerfile
+      dockerfile: src/TaskManager.Api/Dockerfile
     ports:
       - "5000:8080"
     environment:
