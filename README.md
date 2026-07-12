@@ -76,6 +76,59 @@ chmod +x ./scripts/setup.sh ./scripts/start-backend.sh ./scripts/start-frontend.
 docker compose up --build
 ```
 
+### 7. Verify services are up (Docker)
+
+After bringing the stack up, use these commands to confirm services started and are serving content:
+
+- Build and start frontend only (no cache):
+
+```bash
+docker compose build --no-cache frontend
+docker compose up -d frontend
+```
+
+- Check running containers:
+
+```bash
+docker compose ps
+```
+
+- View recent logs (useful for build/runtime errors):
+
+```bash
+docker compose logs --tail=200 frontend
+docker compose logs --tail=200 backend
+```
+
+- Confirm frontend serves the Angular app (open in browser):
+
+	- http://localhost:4200
+
+- Confirm backend health endpoint (open in browser or curl):
+
+```bash
+curl -sS http://localhost:5000/health | jq .
+# or simple check
+curl -I http://localhost:5000/health
+```
+
+- Inspect files inside the frontend container to verify the built artifacts and nginx config:
+
+```bash
+docker compose exec frontend ls -la /usr/share/nginx/html
+docker compose exec frontend sed -n '1,120p' /usr/share/nginx/html/index.html
+docker compose exec frontend cat /etc/nginx/conf.d/default.conf
+```
+
+- If the Nginx default welcome page appears, verify `index.html` exists in `/usr/share/nginx/html` and that `nginx.conf` was copied into `/etc/nginx/conf.d/default.conf`.
+
+- To stop and remove containers (and volumes):
+
+```bash
+docker compose down -v
+```
+
+
 ## Technology Stack
 
 - Backend: ASP.NET Core Web API, .NET 10, EF Core, SQLite, JWT, Swagger, FluentValidation
