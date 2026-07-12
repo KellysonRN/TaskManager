@@ -1,3 +1,5 @@
+# monorepo
+
 You are a Senior Software Architect.
 
 Create a production-ready monorepo for a full-stack Task Management application.
@@ -9,7 +11,7 @@ The monorepo must contain the following structure:
 ./
 │
 ├── backend/
-│   ├── TaskManager.slnx
+│   ├── TaskManager.sln
 │   ├── src/
 │   │   ├── TaskManager.Api
 │   │   ├── TaskManager.Application
