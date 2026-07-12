@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 echo "Installing backend dependencies..."
-dotnet restore backend/TaskManager.slnx
+dotnet restore backend/TaskManager.sln
 
 echo "Installing frontend dependencies..."
 cd frontend
