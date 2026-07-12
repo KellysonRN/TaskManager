@@ -3,8 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using TaskManager.Application.Configuration;
 using TaskManager.Application.Contracts;
-using TaskManager.Api.Models;
 
 namespace TaskManager.Infrastructure.Services;
 
