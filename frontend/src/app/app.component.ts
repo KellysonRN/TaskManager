@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
+  imports: [RouterOutlet],
   template: `
     <main>
       <h1>Task Manager</h1>
-      <p>Angular frontend scaffold ready for feature development.</p>
+      <router-outlet></router-outlet>
     </main>
   `,
   styles: []

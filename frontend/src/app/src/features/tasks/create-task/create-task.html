@@ -1,1 +1,19 @@
-<p>create-task works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <input formControlName="title" placeholder="Enter task title" />
+  <input formControlName="description" placeholder="Enter task description" />
+  <input formControlName="dueDate" type="date" />
+  <select formControlName="status">
+    <option value="">Select status</option>
+    <option value="Pending">Pending</option>
+    <option value="InProgress">In Progress</option>
+    <option value="Completed">Completed</option>
+  </select>
+
+  <button type="submit" [disabled]="!isFormValid || isSaving">
+    Save
+  </button>
+
+  <div *ngIf="isSaving" data-testid="loading">Saving...</div>
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error-message" data-testid="error-message">{{ errorMessage }}</div>
+</form>
