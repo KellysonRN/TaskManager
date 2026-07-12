@@ -1,9 +1,5 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
-using TaskManager.Application.Common.Cqrs;
 using TaskManager.Domain;
 using TaskManager.Infrastructure.Persistence;
 using Xunit;

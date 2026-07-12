@@ -11,4 +11,8 @@ export class TaskService {
   create(payload: unknown): Observable<unknown> {
     return this.http.post<unknown>(this.apiUrl, payload);
   }
+
+  getAll(): Observable<unknown[]> {
+    return this.http.get<unknown[]>(this.apiUrl);
+  }
 }

@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using TaskManager.Application.Common.Cqrs;
@@ -75,7 +76,7 @@ public sealed class TasksControllerTests : IClassFixture<WebApplicationFactory<P
         using var scope = _factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<TaskManagerDbContext>();
         await dbContext.Database.EnsureCreatedAsync();
-        dbContext.Tasks.RemoveRange(dbContext.Tasks);
+        await dbContext.Database.ExecuteSqlRawAsync("DELETE FROM \"Tasks\"");
         await dbContext.SaveChangesAsync();
     }
 }

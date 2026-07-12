@@ -1,5 +1,3 @@
-using System;
-
 namespace TaskManager.Application.Common.Cqrs;
 
 public class ValidationException : Exception

@@ -8,10 +8,19 @@ namespace TaskManager.Api.Controllers;
 public sealed class TasksController : ControllerBase
 {
     private readonly CreateTaskHandler _createTaskHandler;
+    private readonly GetAllTasksHandler _getAllTasksHandler;
 
-    public TasksController(CreateTaskHandler createTaskHandler)
+    public TasksController(CreateTaskHandler createTaskHandler, GetAllTasksHandler getAllTasksHandler)
     {
         _createTaskHandler = createTaskHandler;
+        _getAllTasksHandler = getAllTasksHandler;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<TaskDto>>> GetAll(CancellationToken cancellationToken)
+    {
+        var tasks = await _getAllTasksHandler.HandleAsync(new GetAllTasksQuery(), cancellationToken);
+        return Ok(tasks);
     }
 
     [HttpPost]

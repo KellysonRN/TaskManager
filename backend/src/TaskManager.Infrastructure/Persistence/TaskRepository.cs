@@ -1,6 +1,4 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TaskManager.Application.Common.Cqrs;
 using TaskManager.Domain;
 
@@ -24,5 +22,10 @@ public sealed class TaskRepository : ITaskRepository
 
         await _dbContext.Tasks.AddAsync(entity, cancellationToken);
         return entity;
+    }
+
+    public async Task<IReadOnlyList<TaskEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Tasks.OrderByDescending(t => t.DueDate ?? DateTime.MaxValue).ThenBy(t => t.Title).ToListAsync(cancellationToken);
     }
 }

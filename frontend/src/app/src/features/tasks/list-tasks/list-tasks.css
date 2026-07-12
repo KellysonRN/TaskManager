@@ -1,0 +1,4 @@
+section { display: flex; flex-direction: column; gap: 12px; }
+ul { padding-left: 20px; }
+li { margin-bottom: 12px; }
+.error-message { color: #b91c1c; }

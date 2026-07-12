@@ -1,0 +1,19 @@
+<section>
+  <h2>Tasks</h2>
+
+  <a routerLink="/tasks/create">Create task</a>
+
+  <div *ngIf="isLoading">Loading tasks...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <ul *ngIf="!isLoading && tasks.length > 0">
+    <li *ngFor="let task of tasks">
+      <strong>{{ task.title }}</strong>
+      <div>{{ task.description }}</div>
+      <div>Status: {{ task.status }}</div>
+      <div *ngIf="task.dueDate">Due: {{ task.dueDate | date }}</div>
+    </li>
+  </ul>
+
+  <div *ngIf="!isLoading && tasks.length === 0">No tasks yet.</div>
+</section>
