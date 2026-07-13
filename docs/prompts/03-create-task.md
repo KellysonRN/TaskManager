@@ -1,65 +1,71 @@
+# 03 — Create Task: Unit Tests (Backend, TDD Red Phase)
+
 You are a Senior .NET Engineer following Test-Driven Development (TDD).
 
-The project follows Clean Architecture.
+The project follows Clean Architecture. The solution already contains:
 
-The solution already contains:
+- `TaskManager.Api`
+- `TaskManager.Application`
+- `TaskManager.Domain`
+- `TaskManager.Infrastructure`
+- `TaskManager.UnitTests`
 
-- TaskManager.Api
-- TaskManager.Application
-- TaskManager.Domain
-- TaskManager.Infrastructure
-- TaskManager.UnitTests
+## Your task
 
-Your task is NOT to implement the feature.
+Write **only** the unit tests for the `CreateTask` use case.
 
-Your task is ONLY to write the unit tests for the CreateTask use case.
+Do **not** generate any production code.
 
-Business Rules
+The tests must **fail** because the production code does not exist yet (red phase).
+
+## Interfaces and classes your tests will depend on (to be created as stubs)
+
+You will need to define the following in the test project so tests compile:
+
+| Type | Namespace | Description |
+|---|---|---|
+| `CreateTaskCommand` | `TaskManager.Application.Common.Cqrs` | Input command |
+| `TaskDto` | `TaskManager.Application.Common.Cqrs` | Output DTO |
+| `ITaskRepository` | `TaskManager.Application.Common.Cqrs` | Repository abstraction |
+| `IUnitOfWork` | `TaskManager.Application.Common.Cqrs` | Unit of work abstraction |
+| `CreateTaskHandler` | `TaskManager.Application.Common.Cqrs` | Handler under test |
+| `ValidationException` | `TaskManager.Application.Common.Cqrs` | Thrown on invalid input |
+
+## Business rules to test
 
 - Title is required.
 - Title maximum length is 200 characters.
 - Description maximum length is 1000 characters.
 - DueDate cannot be in the past.
-- Status must be Pending, InProgress or Completed.
-- The authenticated user becomes the owner of the task.
-- Repository must be called exactly once.
-- UnitOfWork (if used) must be committed once.
-- The handler must return the created task.
+- Status must be one of: `Pending`, `InProgress`, `Completed`.
+- The `AuthenticatedUserId` on the command becomes the `OwnerId` of the created entity.
+- Repository `AddAsync` must be called exactly once.
+- `IUnitOfWork.SaveChangesAsync` must be called exactly once.
+- The handler must return a `TaskDto` mapped from the created entity.
 
-Requirements
+## Test scenarios (cover all of these)
 
-Generate tests first.
+1. `CreateTask_Success` — happy path returns a valid `TaskDto`.
+2. `CreateTask_Fails_WhenTitleEmpty` — throws `ValidationException`.
+3. `CreateTask_Fails_WhenTitleTooLong` — title with 201 characters throws.
+4. `CreateTask_Fails_WhenDescriptionTooLong` — description with 1001 characters throws.
+5. `CreateTask_Fails_WhenDueDateIsInThePast` — past `DueDate` throws.
+6. `CreateTask_Fails_WhenStatusIsInvalid` — unrecognized status string throws.
+7. `CreateTask_CallsRepository_ExactlyOnce` — verify `AddAsync` called once.
+8. `CreateTask_CallsUnitOfWork_ExactlyOnce` — verify `SaveChangesAsync` called once.
+9. `CreateTask_SetsOwnerIdFromAuthenticatedUser` — `OwnerId` equals `AuthenticatedUserId`.
+10. `CreateTask_MapsResponseDto_Correctly` — all fields on DTO match command input.
 
-Do NOT generate production code.
+## Requirements
 
 Use:
 
 - xUnit
 - Moq
-- Shoudly
+- Shouldly
 
-Cover at least the following scenarios:
+Place tests in: `backend/tests/TaskManager.UnitTests/`
 
-1. Create task successfully.
+Add an XML comment on each test explaining **why** it exists.
 
-2. Fail when title is empty.
-
-3. Fail when title exceeds 200 characters.
-
-4. Fail when description exceeds 1000 characters.
-
-5. Fail when due_date is in the past.
-
-6. Fail when status is invalid.
-
-7. Verify repository AddAsync is called once.
-
-8. Verify SaveChangesAsync is called once.
-
-9. Verify created entity contains the authenticated UserId.
-
-10. Verify response DTO is correctly mapped.
-
-Explain why each test exists.
-
-The tests should fail because production code does not exist yet.
+The tests should **not** pass until the production code is implemented in the next prompt.

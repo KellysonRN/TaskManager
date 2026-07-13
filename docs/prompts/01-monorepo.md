@@ -1,4 +1,4 @@
-# monorepo
+# 01 — Monorepo Scaffold
 
 You are a Senior Software Architect.
 
@@ -6,30 +6,29 @@ Create a production-ready monorepo for a full-stack Task Management application.
 
 The repository must follow Clean Architecture principles and be easy to present during a technical interview.
 
-The monorepo must contain the following structure:
+## Expected folder structure
 
+```
 ./
 │
 ├── backend/
 │   ├── TaskManager.sln
 │   ├── src/
-│   │   ├── TaskManager.Api
-│   │   ├── TaskManager.Application
-│   │   ├── TaskManager.Domain
-│   │   └── TaskManager.Infrastructure
+│   │   ├── TaskManager.Api/
+│   │   │   └── Dockerfile
+│   │   ├── TaskManager.Application/
+│   │   ├── TaskManager.Domain/
+│   │   └── TaskManager.Infrastructure/
 │   │
-│   ├── tests/
-│   │   ├── TaskManager.UnitTests
-│   │   └── TaskManager.IntegrationTests
-│   │
-│   └── docker/
+│   └── tests/
+│       ├── TaskManager.UnitTests/
+│       └── TaskManager.IntegrationTests/
 │
 ├── frontend/
 │   ├── src/
-│   ├── public/
 │   ├── package.json
 │   ├── angular.json
-│   └── ...
+│   └── Dockerfile
 │
 ├── docs/
 │   └── prompts/
@@ -46,36 +45,35 @@ The monorepo must contain the following structure:
 ├── .editorconfig
 ├── .gitignore
 └── LICENSE
+```
 
-Requirements
+## Tech stack
 
-- .NET 10
-- ASP.NET Core Web API
-- Angular 20
-- SQLite
-- Entity Framework Core
+- .NET 10 / ASP.NET Core Web API
+- Angular 20 (standalone components)
+- SQLite + Entity Framework Core
 - JWT Authentication
-- Swagger
+- Swagger / OpenAPI
 - FluentValidation
 - Shouldly
 - xUnit
 - Moq
-- Docker
-- Docker Compose
+- Docker + Docker Compose
 
-The backend must follow Clean Architecture.
+## Clean Architecture layers — must be completely separated
 
-Domain
-Application
-Infrastructure
-Presentation
+| Layer | Project |
+|---|---|
+| Domain | TaskManager.Domain |
+| Application | TaskManager.Application |
+| Infrastructure | TaskManager.Infrastructure |
+| Presentation | TaskManager.Api |
 
-must be completely separated.
+## Constraints
 
-Create folders only.
-
-Do not implement business logic yet.
-
-Create a professional README with setup instructions.
-
-Generate all necessary configuration files.
+- Create **folder and project scaffolding only**.
+- Do **not** implement any business logic.
+- Do **not** add placeholder classes beyond what is needed for the solution to compile.
+- Create a professional `README.md` with prerequisites, setup instructions, and how to run each part.
+- Create `.editorconfig` and `.gitignore` appropriate for a .NET + Angular monorepo.
+- Generate all necessary configuration files (`appsettings.json`, `angular.json`, `docker-compose.yml`, etc.).
