@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { AuthService } from '../../../core/services/auth.service';
 import { TaskService } from '../create-task/task.service';
 
 export interface TaskSummary {
@@ -21,6 +22,11 @@ export interface TaskSummary {
 })
 export class TaskList implements OnInit {
   private readonly taskService = inject(TaskService);
+  private readonly authService = inject(AuthService);
+
+  logout(): void {
+    this.authService.logout();
+  }
 
   tasks: TaskSummary[] = [];
   isLoading = false;

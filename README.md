@@ -136,6 +136,39 @@ docker compose down -v
 - Testing: xUnit, Moq, Shouldly
 - Containerization: Docker, Docker Compose
 
+## Authentication
+
+The application uses JWT Bearer authentication. Protected endpoints require an `Authorization: Bearer <token>` header.
+
+### Default Credentials (seeded on first startup)
+
+| Field    | Value                    |
+|----------|--------------------------|
+| Email    | `admin@taskmanager.dev`  |
+| Password | `Admin@123`              |
+
+### Login
+
+```bash
+curl -s -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@taskmanager.dev","password":"Admin@123"}' | jq .
+```
+
+The response contains a `token` field. Use it in subsequent requests:
+
+```bash
+TOKEN=$(curl -s -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@taskmanager.dev","password":"Admin@123"}' | jq -r .token)
+
+# List tasks (protected endpoint)
+curl -s http://localhost:5000/api/tasks \
+  -H "Authorization: Bearer $TOKEN" | jq .
+```
+
+> The seed runs automatically on startup only if the `Users` table is empty. It is skipped in the `Testing` environment used by integration tests.
+
 ## Notes
 
 This scaffold intentionally focuses on structure, configuration, and developer experience. Business logic and domain features will be implemented in subsequent iterations.

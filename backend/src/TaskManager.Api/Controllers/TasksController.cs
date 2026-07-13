@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Application.Tasks.Commands.CreateTask;
 using TaskManager.Application.Tasks.Dtos;
@@ -7,6 +8,7 @@ namespace TaskManager.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public sealed class TasksController : ControllerBase
 {
     private readonly CreateTaskHandler _createTaskHandler;

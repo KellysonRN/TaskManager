@@ -1,7 +1,11 @@
 <section>
-  <h2>Tasks</h2>
-
-  <a routerLink="/tasks/create">Create task</a>
+  <header class="list-header">
+    <h2>Tasks</h2>
+    <div class="list-actions">
+      <a routerLink="/tasks/create">Create task</a>
+      <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+  </header>
 
   <div *ngIf="isLoading">Loading tasks...</div>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>

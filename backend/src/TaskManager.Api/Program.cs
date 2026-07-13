@@ -22,6 +22,8 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+// Also configure the Application-layer JwtSettings used by JwtTokenService
+builder.Services.Configure<TaskManager.Application.Configuration.JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
@@ -96,7 +98,29 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<TaskManagerDbContext>();
-    dbContext.Database.EnsureCreated();
+
+    try
+    {
+        dbContext.Database.EnsureCreated();
+
+        // Probe the Users table to detect schema drift (e.g. DB created before
+        // UserEntity was added). If it is missing, drop and recreate the whole schema.
+        _ = dbContext.Users.Any();
+    }
+    catch (Microsoft.Data.Sqlite.SqliteException)
+    {
+        // Schema is outdated — recreate so all tables exist.
+        dbContext.Database.EnsureDeleted();
+        dbContext.Database.EnsureCreated();
+    }
+
+    // Seed initial data. The seeder is idempotent (skips if data already exists).
+    // In integration tests the 'Testing' environment skips this to allow explicit control.
+    if (!app.Environment.IsEnvironment("Testing"))
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<TaskManager.Infrastructure.Persistence.DataSeeder>();
+        await seeder.SeedAsync();
+    }
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

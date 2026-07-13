@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using TaskManager.Application.Auth.Commands.Login;
 using TaskManager.Application.Tasks.Commands.CreateTask;
 using TaskManager.Application.Tasks.Queries.GetAllTasks;
 
@@ -10,6 +11,7 @@ public static class DependencyInjection
     {
         services.AddScoped<CreateTaskHandler>();
         services.AddScoped<GetAllTasksHandler>();
+        services.AddScoped<LoginHandler>();
         return services;
     }
 }

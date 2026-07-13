@@ -46,6 +46,14 @@ public sealed class ExceptionHandlingMiddleware
                 return;
             }
 
+            if (ex is TaskManager.Application.Common.Exceptions.UnauthorizedException)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                var payload = JsonSerializer.Serialize(new { error = ex.Message });
+                await context.Response.WriteAsync(payload);
+                return;
+            }
+
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             var fallbackPayload = JsonSerializer.Serialize(new { error = "An unexpected error occurred." });
             await context.Response.WriteAsync(fallbackPayload);
