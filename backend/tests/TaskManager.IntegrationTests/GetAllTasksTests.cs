@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Tasks.Dtos;
 using TaskManager.Domain;
 using TaskManager.Infrastructure.Persistence;
 using Xunit;

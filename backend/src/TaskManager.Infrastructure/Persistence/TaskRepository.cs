@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Tasks.Contracts;
 using TaskManager.Domain;
 
 namespace TaskManager.Infrastructure.Persistence;

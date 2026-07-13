@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Tasks.Commands.CreateTask;
+using TaskManager.Application.Tasks.Queries.GetAllTasks;
 
 namespace TaskManager.Application;
 

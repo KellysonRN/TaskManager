@@ -1,8 +1,9 @@
 using Moq;
 using Shouldly;
 using Xunit;
-using TaskManager.Application.Common.Cqrs;
 using TaskManager.Domain;
+using TaskManager.Application.Tasks.Contracts;
+using TaskManager.Application.Tasks.Queries.GetAllTasks;
 
 namespace TaskManager.UnitTests.Application.Tasks;
 

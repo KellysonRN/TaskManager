@@ -1,4 +1,4 @@
-namespace TaskManager.Application.Common.Cqrs;
+namespace TaskManager.Application.Common.Exceptions;
 
 public class ValidationException : Exception
 {

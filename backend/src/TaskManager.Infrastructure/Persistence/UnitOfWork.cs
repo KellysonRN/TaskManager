@@ -1,4 +1,4 @@
-using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Common.Contracts;
 
 namespace TaskManager.Infrastructure.Persistence;
 

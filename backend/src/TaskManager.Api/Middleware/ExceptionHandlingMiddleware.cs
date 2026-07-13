@@ -38,7 +38,7 @@ public sealed class ExceptionHandlingMiddleware
             context.Response.Clear();
             context.Response.ContentType = "application/json";
 
-            if (ex is TaskManager.Application.Common.Cqrs.ValidationException)
+            if (ex is TaskManager.Application.Common.Exceptions.ValidationException)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 var payload = JsonSerializer.Serialize(new { error = ex.Message });

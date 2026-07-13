@@ -1,4 +1,8 @@
-namespace TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Tasks.Contracts;
+using TaskManager.Application.Tasks.Dtos;
+
+namespace TaskManager.Application.Tasks.Queries.GetAllTasks;
 
 public class GetAllTasksHandler : IRequestHandler<GetAllTasksQuery, IReadOnlyList<TaskDto>>
 {

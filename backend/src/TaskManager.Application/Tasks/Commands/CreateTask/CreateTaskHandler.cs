@@ -1,10 +1,15 @@
+using TaskManager.Application.Common.Contracts;
+using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Common.Exceptions;
+using TaskManager.Application.Tasks.Contracts;
+using TaskManager.Application.Tasks.Dtos;
 using TaskManager.Domain;
 
-namespace TaskManager.Application.Common.Cqrs;
+namespace TaskManager.Application.Tasks.Commands.CreateTask;
 
 public class CreateTaskHandler : IRequestHandler<CreateTaskCommand, TaskDto>
 {
-    private static readonly string[] AllowedStatuses = new[] { "Pending", "InProgress", "Completed" };
+    private static readonly string[] AllowedStatuses = ["Pending", "InProgress", "Completed"];
 
     private readonly ITaskRepository _taskRepository;
     private readonly IUnitOfWork _unitOfWork;

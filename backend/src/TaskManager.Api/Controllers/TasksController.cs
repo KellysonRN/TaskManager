@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Tasks.Commands.CreateTask;
+using TaskManager.Application.Tasks.Dtos;
+using TaskManager.Application.Tasks.Queries.GetAllTasks;
 
 namespace TaskManager.Api.Controllers;
 

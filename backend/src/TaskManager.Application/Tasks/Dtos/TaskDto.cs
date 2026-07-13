@@ -1,10 +1,11 @@
-namespace TaskManager.Application.Common.Cqrs;
+namespace TaskManager.Application.Tasks.Dtos;
 
-public class CreateTaskCommand : IRequest<TaskDto>
+public class TaskDto
 {
+    public Guid Id { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
     public DateTime? DueDate { get; set; }
     public string? Status { get; set; }
-    public Guid? AuthenticatedUserId { get; set; }
+    public Guid OwnerId { get; set; }
 }

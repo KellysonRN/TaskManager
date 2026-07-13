@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TaskManager.Application.Common.Cqrs;
+using TaskManager.Application.Common.Contracts;
 using TaskManager.Application.Contracts;
+using TaskManager.Application.Tasks.Contracts;
 using TaskManager.Infrastructure.Persistence;
 using TaskManager.Infrastructure.Services;
 
