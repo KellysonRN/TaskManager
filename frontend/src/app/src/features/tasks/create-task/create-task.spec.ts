@@ -5,24 +5,20 @@ import { Observable, of, throwError } from 'rxjs';
 import { CreateTask } from './create-task';
 import { TaskService } from './task.service';
 
-class TaskServiceMock extends TaskService {
-  override create = jasmine.createSpy('create');
-}
-
 describe('CreateTask', () => {
   let component: CreateTask;
   let fixture: ComponentFixture<CreateTask>;
-  let taskService: TaskServiceMock;
+  let taskService: jasmine.SpyObj<Pick<TaskService, 'create'>>;
   let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    taskService = new TaskServiceMock();
+    taskService = jasmine.createSpyObj('TaskService', ['create']);
     router = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
       imports: [CreateTask],
       providers: [
-        { provide: TaskService, useValue: taskService },
+        { provide: TaskService, useValue: taskService as unknown as TaskService },
         { provide: Router, useValue: router },
       ],
     }).compileComponents();

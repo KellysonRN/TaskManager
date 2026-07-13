@@ -75,5 +75,84 @@ public sealed class TasksControllerTests
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
+    [Fact]
+    public async Task DeleteTask_Returns_NoContent_When_Task_Exists()
+    {
+        var createPayload = new
+        {
+            title = "Task to delete",
+            description = "Delete endpoint integration",
+            dueDate = DateTime.UtcNow.AddDays(1),
+            status = "Pending"
+        };
+
+        var createResponse = await _client.PostAsJsonAsync("/api/tasks", createPayload);
+        createResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
+        var createdTask = await createResponse.Content.ReadFromJsonAsync<TaskDto>();
+        createdTask.ShouldNotBeNull();
+
+        var deleteResponse = await _client.DeleteAsync($"/api/tasks/{createdTask.Id}");
+
+        deleteResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async Task DeleteTask_Returns_NotFound_When_Task_DoesNotExist()
+    {
+        var deleteResponse = await _client.DeleteAsync($"/api/tasks/{Guid.NewGuid()}");
+
+        deleteResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task UpdateTask_Returns_Ok_And_Updated_Task()
+    {
+        var createPayload = new
+        {
+            title = "Task to update",
+            description = "Before",
+            dueDate = DateTime.UtcNow.AddDays(1),
+            status = "Pending"
+        };
+
+        var createResponse = await _client.PostAsJsonAsync("/api/tasks", createPayload);
+        createResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
+        var createdTask = await createResponse.Content.ReadFromJsonAsync<TaskDto>();
+        createdTask.ShouldNotBeNull();
+
+        var updatePayload = new
+        {
+            title = "Task updated",
+            description = "After",
+            dueDate = DateTime.UtcNow.AddDays(3),
+            status = "InProgress"
+        };
+
+        var updateResponse = await _client.PutAsJsonAsync($"/api/tasks/{createdTask.Id}", updatePayload);
+
+        updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var updatedTask = await updateResponse.Content.ReadFromJsonAsync<TaskDto>();
+        updatedTask.ShouldNotBeNull();
+        updatedTask.Title.ShouldBe("Task updated");
+        updatedTask.Description.ShouldBe("After");
+        updatedTask.Status.ShouldBe("InProgress");
+    }
+
+    [Fact]
+    public async Task UpdateTask_Returns_NotFound_When_Task_DoesNotExist()
+    {
+        var updatePayload = new
+        {
+            title = "Task updated",
+            description = "After",
+            dueDate = DateTime.UtcNow.AddDays(3),
+            status = "InProgress"
+        };
+
+        var updateResponse = await _client.PutAsJsonAsync($"/api/tasks/{Guid.NewGuid()}", updatePayload);
+
+        updateResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
     private sealed record TokenResponse(string Token);
 }

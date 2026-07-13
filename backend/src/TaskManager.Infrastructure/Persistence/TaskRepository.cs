@@ -28,4 +28,38 @@ public sealed class TaskRepository : ITaskRepository
     {
         return await _dbContext.Tasks.OrderByDescending(t => t.DueDate ?? DateTime.MaxValue).ThenBy(t => t.Title).ToListAsync(cancellationToken);
     }
+
+    public async Task<TaskEntity?> UpdateAsync(
+        Guid id,
+        string? title,
+        string? description,
+        DateTime? dueDate,
+        string? status,
+        CancellationToken cancellationToken = default)
+    {
+        var task = await _dbContext.Tasks.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+        if (task is null)
+        {
+            return null;
+        }
+
+        task.Title = title;
+        task.Description = description;
+        task.DueDate = dueDate;
+        task.Status = status;
+
+        return task;
+    }
+
+    public async Task<bool> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var task = await _dbContext.Tasks.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+        if (task is null)
+        {
+            return false;
+        }
+
+        _dbContext.Tasks.Remove(task);
+        return true;
+    }
 }

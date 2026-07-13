@@ -12,10 +12,62 @@
 
   <ul *ngIf="!isLoading && tasks.length > 0">
     <li *ngFor="let task of tasks">
-      <strong>{{ task.title }}</strong>
-      <div>{{ task.description }}</div>
-      <div>Status: {{ task.status }}</div>
-      <div *ngIf="task.dueDate">Due: {{ task.dueDate | date }}</div>
+      <ng-container *ngIf="editingTaskId !== task.id; else editForm">
+        <strong>{{ task.title }}</strong>
+        <div>{{ task.description }}</div>
+        <div>Status: {{ task.status }}</div>
+        <div *ngIf="task.dueDate">Due: {{ task.dueDate | date }}</div>
+
+        <div class="task-actions">
+          <button type="button" class="btn-edit" (click)="startEdit(task)">Edit</button>
+          <button
+            type="button"
+            class="btn-delete"
+            [disabled]="deletingTaskId === task.id"
+            (click)="deleteTask(task.id)">
+            {{ deletingTaskId === task.id ? 'Deleting...' : 'Delete' }}
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #editForm>
+        <div class="edit-grid">
+          <label>
+            Title
+            <input [(ngModel)]="editModel.title" type="text" />
+          </label>
+
+          <label>
+            Description
+            <input [(ngModel)]="editModel.description" type="text" />
+          </label>
+
+          <label>
+            Due Date
+            <input [(ngModel)]="editModel.dueDate" type="date" />
+          </label>
+
+          <label>
+            Status
+            <select [(ngModel)]="editModel.status">
+              <option value="Pending">Pending</option>
+              <option value="InProgress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="task-actions">
+          <button
+            type="button"
+            class="btn-edit"
+            [disabled]="updatingTaskId === task.id"
+            (click)="saveEdit(task.id)">
+            {{ updatingTaskId === task.id ? 'Saving...' : 'Save' }}
+          </button>
+          <button type="button" class="btn-logout" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </ng-template>
     </li>
   </ul>
 
